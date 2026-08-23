@@ -34,6 +34,15 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.md,
     marginVertical: Spacing.sm,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: Colors.border,
+    // Shadow (iOS)
+    shadowColor: '#5C6BC0',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.10,
+    shadowRadius: 12,
+    // Shadow (Android)
+    elevation: 4,
   },
   topSection: {
     height: 180,

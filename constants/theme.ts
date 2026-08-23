@@ -1,28 +1,32 @@
 export const Colors = {
   // Backgrounds
-  backgroundDark: '#151a27',
-  backgroundCard: '#1e2438',
-  backgroundInput: '#1e2438',
+  backgroundDark: '#F0F4FF',
+  backgroundCard: '#FFFFFF',
+  backgroundInput: '#FFFFFF',
 
   // Text
-  textPrimary: '#ffffff',
-  textSecondary: '#8a92a6',
-  textPrice: '#ffd33d',
+  textPrimary: '#1A1D2E',
+  textSecondary: '#6B7280',
+  textPrice: '#5C6BC0',
 
-  // Accent
-  accent: '#ffd33d',
+  // Accents
+  accent: '#5C6BC0',
+  accentSecondary: '#FF6B35',
 
-  // Priority badges — each paired with a label (colorblind-safe)
-  priorityHigh: '#e05252',
-  priorityMedium: '#e08c2a',
-  priorityLow: '#4caf8a',
+  // Priority badges — shape + label paired for colorblind safety
+  // High:   ♦ solid diamond
+  priorityHigh: '#F43F5E',
+  // Medium: ■ solid square
+  priorityMedium: '#F59E0B',
+  // Low:    ○ circle
+  priorityLow: '#06B6D4',
 
   // Retiring soon
-  retiring: '#c0392b',
-  retiringBackground: 'rgba(192, 57, 43, 0.15)',
+  retiring: '#FF6B35',
+  retiringBackground: 'rgba(255, 107, 53, 0.12)',
 
   // Border / divider
-  border: '#2a3148',
+  border: '#DDE3F0',
 } as const;
 
 export const Spacing = {

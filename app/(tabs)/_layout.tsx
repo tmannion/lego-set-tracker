@@ -1,22 +1,22 @@
-import { Tabs } from 'expo-router';
-
+import { Colors } from '@/constants/theme';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
     <Tabs
-        screenOptions={{
-            tabBarActiveTintColor: '#ffd33d',
-            headerStyle: {
-                backgroundColor: '#25292e',
-            },
-            headerShadowVisible: false,
-            headerTintColor: '#fff',
-            tabBarStyle: {
-                backgroundColor: '#25292e',
-            },
-        }}
+      screenOptions={{
+        tabBarActiveTintColor: Colors.accent,
+        headerStyle: {
+          backgroundColor: Colors.backgroundCard,
+        },
+        headerShadowVisible: false,
+        headerTintColor: Colors.textPrimary,
+        tabBarStyle: {
+          backgroundColor: Colors.backgroundCard,
+          borderTopColor: Colors.border,
+        },
+      }}
     >
       <Tabs.Screen
         name="index"
@@ -32,7 +32,7 @@ export default function TabLayout() {
         options={{
           title: 'Add Items',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'add-circle' : 'add-circle-outline'} color={color} size={24}/>
+            <Ionicons name={focused ? 'add-circle' : 'add-circle-outline'} color={color} size={24} />
           ),
         }}
       />
