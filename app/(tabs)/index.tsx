@@ -1,33 +1,34 @@
-import { Colors, Spacing } from '@/constants/theme';
-import { ScrollView, StyleSheet, View } from 'react-native';
-
 import SetCard from '@/components/SetCard';
+import { Colors, FontSize, Spacing } from '@/constants/theme';
+import { SetsContext } from '@/context/SetsContext';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useContext } from 'react';
 
 export default function Index() {
+  const context = useContext(SetsContext);
+  const sets = context?.sets ?? [];
+
+  const totalPrice = sets.reduce((sum, set) => sum + set.price, 0);
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.list}>
-        <SetCard
-          name="Eiffel Tower"
-          number={10307}
-          theme="Icons"
-          price={629.99}
-          pieceCount={10001}
-        />
-        <SetCard
-          name="Botanical Garden"
-          number={10329}
-          theme="Icons"
-          price={99.99}
-          pieceCount={1363}
-        />
-        <SetCard
-          name="Millennium Falcon"
-          number={75192}
-          theme="Star Wars"
-          price={849.99}
-          pieceCount={7541}
-        />
+        <Text style={styles.title}>Wishlist</Text>
+        <Text style={styles.subtitle}>
+          {sets.length} sets · €{totalPrice.toFixed(2)}
+        </Text>
+
+        {sets.map((set) => (
+          <SetCard
+            key={set.id}
+            name={set.name}
+            number={set.number}
+            theme={set.theme}
+            price={set.price}
+            pieceCount={set.pieceCount}
+            imageUrl={set.imageUrl}
+          />
+        ))}
       </ScrollView>
     </View>
   );
@@ -40,5 +41,17 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.md,
+  },
+  title: {
+    color: Colors.textPrimary,
+    fontSize: FontSize.xl,
+    fontWeight: 'bold',
+    marginBottom: Spacing.xs,
+  },
+  subtitle: {
+    color: Colors.textSecondary,
+    fontSize: FontSize.sm,
+    marginBottom: Spacing.lg,
   },
 });
