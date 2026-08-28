@@ -1,7 +1,9 @@
 import TextField from '@/components/ui/TextField';
+import Button from '@/components/ui/Button';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
-import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SetsContext } from '@/context/SetsContext';
+import { useState, useContext } from 'react';
+import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native';
 
 export default function AddItem() {
   const [name, setName] = useState('');
@@ -10,6 +12,30 @@ export default function AddItem() {
   const [price, setPrice] = useState('');
   const [pieceCount, setPieceCount] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+
+  const context = useContext(SetsContext);
+
+  const handleSubmit = () => {
+    if (!name || !number || !price) return;
+
+    context?.addSet({
+      id: Date.now().toString(),
+      name,
+      number: parseInt(number, 10),
+      theme,
+      price: parseFloat(price),
+      pieceCount: parseInt(pieceCount, 10),
+      imageUrl: imageUrl || undefined,
+    });
+
+    Alert.alert('Success', 'Set added to your wishlist!');
+    setName('');
+    setNumber('');
+    setTheme('');
+    setPrice('');
+    setPieceCount('');
+    setImageUrl('');
+  };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
@@ -77,6 +103,9 @@ export default function AddItem() {
         onChangeText={setImageUrl}
         optional={true}
       />
+
+      {/* Submit button */}
+      <Button label='Add to Wishlist' onPress={handleSubmit} />
     </ScrollView>
   );
 }

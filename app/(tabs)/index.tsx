@@ -1,37 +1,34 @@
-import { Colors, FontSize, Spacing } from '@/constants/theme';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-
 import SetCard from '@/components/SetCard';
+import { Colors, FontSize, Spacing } from '@/constants/theme';
+import { SetsContext } from '@/context/SetsContext';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useContext } from 'react';
 
 export default function Index() {
+  const context = useContext(SetsContext);
+  const sets = context?.sets ?? [];
+
+  const totalPrice = sets.reduce((sum, set) => sum + set.price, 0);
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.list}>
         <Text style={styles.title}>Wishlist</Text>
-        <Text style={styles.subtitle}>4 sets · €1,545.97</Text>
+        <Text style={styles.subtitle}>
+          {sets.length} sets · €{totalPrice.toFixed(2)}
+        </Text>
 
-        <SetCard
-          name="Eiffel Tower"
-          number={10307}
-          theme="Icons"
-          price={629.99}
-          pieceCount={10001}
-        />
-        <SetCard
-          name="Botanical Garden"
-          number={10329}
-          theme="Icons"
-          price={99.99}
-          pieceCount={1363}
-        />
-        <SetCard
-          name="Millennium Falcon"
-          number={75192}
-          theme="Star Wars"
-          price={849.99}
-          pieceCount={7541}
-          imageUrl='https://www.lego.com/cdn/cs/set/assets/blt3349f56c6f192e18/75192_Prod.png?format=webply&fit=bounds&quality=75&width=1200&height=1200&dpr=1'
-        />
+        {sets.map((set) => (
+          <SetCard
+            key={set.id}
+            name={set.name}
+            number={set.number}
+            theme={set.theme}
+            price={set.price}
+            pieceCount={set.pieceCount}
+            imageUrl={set.imageUrl}
+          />
+        ))}
       </ScrollView>
     </View>
   );

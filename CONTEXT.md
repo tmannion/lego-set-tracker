@@ -7,24 +7,53 @@ track price, piece count, theme, and an optional image. Future features
 include priority badges, retirement date alerts, store availability, and
 a profile/stats screen.
 
-Built with: Expo SDK 54, Expo Router v4, React Native, TypeScript, Expo Go.
+Built with: Expo SDK 54, Expo Router, React Native, TypeScript, Expo Go.
 
 ---
 
-## Current state (end of session 2)
+## Current state (end of session 3)
 
-### Files created / modified this session
+### File structure
 
-| File | Status |
-|------|--------|
-| `constants/theme.ts` | Created — full colour + spacing token set |
-| `components/SetCard.tsx` | Built and styled — card layout with image support |
-| `components/ui/TextField.tsx` | Created — reusable labelled text input primitive |
-| `app/(tabs)/index.tsx` | Home screen — scrollable card list with title header |
-| `app/(tabs)/add-item.tsx` | Add Set form — all fields wired to state |
-| `app/(tabs)/_layout.tsx` | Updated to use theme tokens |
-| `app/_layout.tsx` | StatusBar changed to `dark` for light theme |
-| `.kiro/steering/project-standards.md` | Created — project rules for Kiro |
+```
+app/
+  _layout.tsx              — root layout, wraps everything in SetsProvider
+  (tabs)/
+    _layout.tsx            — tab bar, uses theme tokens
+    index.tsx              — Wishlist screen, reads from SetsContext
+    add-item.tsx           — Add Set form, writes to SetsContext
+
+components/
+  SetCard.tsx              — card with image, name/theme pill, price, piece count
+  ui/
+    TextField.tsx          — labelled TextInput primitive
+    Button.tsx             — reusable TouchableOpacity button primitive
+
+constants/
+  theme.ts                 — all colour, spacing, radius, font size tokens
+
+context/
+  SetsContext.tsx          — React Context + SetsProvider for shared set list
+
+data/
+  dummy.ts                 — LegoSet type + DUMMY_SETS initial data
+```
+
+---
+
+## Data shape (data/dummy.ts)
+
+```ts
+export type LegoSet = {
+  id: string;
+  name: string;
+  number: number;
+  theme: string;
+  price: number;
+  pieceCount: number;
+  imageUrl?: string;
+};
+```
 
 ---
 
@@ -32,9 +61,9 @@ Built with: Expo SDK 54, Expo Router v4, React Native, TypeScript, Expo Go.
 
 Indigo + orange punch accent on a soft periwinkle background:
 
-- `backgroundDark`: `#F0F4FF` — page background
-- `backgroundCard`: `#FFFFFF` — card / input surface
-- `accent`: `#5C6BC0` — indigo, active tabs, price text
+- `backgroundDark`: `#F0F4FF` — page/screen background
+- `backgroundCard`: `#FFFFFF` — card and input surface
+- `accent`: `#5C6BC0` — indigo, active tabs, buttons, price text
 - `accentSecondary`: `#FF6B35` — orange, retiring soon
 - `textPrimary`: `#1A1D2E`
 - `textSecondary`: `#6B7280`
@@ -43,14 +72,16 @@ Indigo + orange punch accent on a soft periwinkle background:
 
 ---
 
-## Component architecture
+## React Context (context/SetsContext.tsx)
 
-```
-components/
-  SetCard.tsx          — card with image, name, number·theme pill, price, piece count
-  ui/
-    TextField.tsx      — labelled TextInput primitive with optional flag
-```
+- `SetsContext` holds `{ sets: LegoSet[], addSet: (set: LegoSet) => void }`
+- `SetsProvider` wraps the whole app in `app/_layout.tsx`
+- Initialised with `DUMMY_SETS` from `data/dummy.ts`
+- Any screen reads context with `useContext(SetsContext)`
+
+---
+
+## Component notes
 
 ### SetCard props
 ```ts
@@ -63,6 +94,9 @@ type SetCardProps = {
   imageUrl?: string;
 }
 ```
+- Top section: 180px fixed height, image fills with `absoluteFillObject + resizeMode cover`
+- Name + subtitle sit in a semi-transparent grey pill (`rgba(240,240,240,0.88)`)
+- Bottom section: dark strip with price (gold) left, piece count (muted) right
 
 ### TextField props
 ```ts
@@ -76,12 +110,20 @@ type TextFieldProps = {
 }
 ```
 
+### Button props
+```ts
+type Props = {
+  label: string;
+  onPress?: () => void;
+}
+```
+
 ---
 
-## Add Set form fields (add-item.tsx)
+## Add Set form (add-item.tsx)
 
-| Field | State var | Type | Layout |
-|-------|-----------|------|--------|
+| Field | State | Type | Layout |
+|-------|-------|------|--------|
 | Set Name | `name` | string | full width |
 | Set Number | `number` | string | left half |
 | Price (€) | `price` | string | right half |
@@ -89,44 +131,28 @@ type TextFieldProps = {
 | Piece Count | `pieceCount` | string | right half |
 | Image URL | `imageUrl` | string | full width, optional |
 
-All state is `string` (raw input). Conversion to `number` happens at point of use.
+- All state is `string` (raw input), converted on submit
+- `handleSubmit` guards on `name`, `number`, `price` being non-empty
+- On submit: calls `context.addSet()`, shows `Alert`, clears all fields
+- `id` generated with `Date.now().toString()` until DB is added
 
 ---
 
-## What needs to be done next session
+## What to work on next
 
-### Priority 1 — Wire up the form
-- Create a dummy data file (`data/sets.ts`) with a typed `LegoSet` array
-  to replace hardcoded cards in `index.tsx`
-- Set up **React Context** (`context/SetsContext.tsx`) to share the set list
-  between `index.tsx` (reads) and `add-item.tsx` (writes)
-- Add a **Submit button** to `add-item.tsx` that converts string state to
-  numbers, builds a `LegoSet` object, calls `addSet()` from context,
-  then navigates back to the home tab
-- Make the Wishlist title summary line (`3 sets · €1,579.97`) dynamic,
-  calculated from the live set list
+### Priority 1 — Form validation
+- Show inline error messages under fields when submit is attempted with missing/invalid values
+- Price and pieceCount should validate as valid numbers
 
-### Priority 2 — Validation
-- Required fields: name, number, price
-- Price and pieceCount must parse to valid numbers
-- Show an inline error message under invalid fields on submit attempt
+### Priority 2 — Database
+- Replace Context + dummy data with `expo-sqlite` + Drizzle ORM
+- Data currently lives in memory only — lost on app restart
+- **Important:** MySQL cannot be used with Expo Go directly. Options:
+  1. `expo-sqlite` — local on-device DB, simplest for a personal tracker
+  2. Supabase — if sync across devices is needed later
+- Recommend SQLite for v1, discuss with user at start of next session
 
-### Priority 3 — Database (future session)
-- Replace context/dummy data with `expo-sqlite` + Drizzle ORM
-- Note: MySQL will NOT work with Expo Go — SQLite is the correct
-  embedded database for a React Native app. MySQL requires a backend
-  server. Clarify this with the user next session.
-
----
-
-## Known issues / notes
-
-- The home screen summary line (`4 sets · €1,545.97`) is currently
-  hardcoded — needs to be derived from live data
-- No form validation yet
-- Priority badges are designed (colors + shapes in theme) but not
-  yet implemented in SetCard or the form
-- The user mentioned MySQL — this needs a conversation. Expo Go /
-  React Native cannot connect to MySQL directly. Options are:
-  1. SQLite (local, no server needed) — simplest for v1
-  2. A REST API / Supabase backend — needed if data should sync across devices
+### Priority 3 — Remaining screens
+- Profile screen (stats: total sets, total value, total pieces, high priority count)
+- Priority badges on SetCard (High ♦ / Medium ■ / Low ○)
+- Retirement date field + "retiring soon" alerts
