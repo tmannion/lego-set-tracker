@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.sm,
   },
   image: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     resizeMode: 'cover',
   },
 });

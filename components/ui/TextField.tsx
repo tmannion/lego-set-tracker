@@ -8,9 +8,10 @@ type TextFieldProps = {
   onChangeText: (text: string) => void;
   keyboardType?: KeyboardTypeOptions;
   optional?: boolean;
+  lineNo?: number;
 };
 
-export default function TextField({ label, placeholder, value,  onChangeText,  keyboardType = 'default',  optional = false }: TextFieldProps) {
+export default function TextField({ label, placeholder, value,  onChangeText,  keyboardType = 'default',  optional = false, lineNo = 1 }: TextFieldProps) {
   return (
     <View style={styles.wrapper}>
       <Text style={styles.label}>
@@ -18,6 +19,8 @@ export default function TextField({ label, placeholder, value,  onChangeText,  k
         {optional && <Text style={styles.optional}> (optional)</Text>}
       </Text>
       <TextInput
+        multiline
+        numberOfLines={lineNo}
         style={styles.input}
         placeholder={placeholder}
         placeholderTextColor={Colors.textSecondary}

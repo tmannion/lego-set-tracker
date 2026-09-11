@@ -6,6 +6,9 @@ export type LegoSet = {
   price: number;
   pieceCount: number;
   imageUrl?: string;
+  stores?: string;
+  retirementDate?: string;
+  note?: string;
 };
 
 export const DUMMY_SETS: LegoSet[] = [

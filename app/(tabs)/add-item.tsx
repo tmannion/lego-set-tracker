@@ -1,9 +1,10 @@
-import TextField from '@/components/ui/TextField';
 import Button from '@/components/ui/Button';
+import TextField from '@/components/ui/TextField';
+import DatePicker from '@/components/ui/DatePicker';
 import { Colors, FontSize, Spacing } from '@/constants/theme';
 import { SetsContext } from '@/context/SetsContext';
-import { useState, useContext } from 'react';
-import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native';
+import { useContext, useState } from 'react';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function AddItem() {
   const [name, setName] = useState('');
@@ -12,6 +13,9 @@ export default function AddItem() {
   const [price, setPrice] = useState('');
   const [pieceCount, setPieceCount] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [stores, setStores] = useState('');
+  const [retireDate, setRetireDate] = useState<Date | null>(null);
+  const [note, setNote] = useState('');
 
   const context = useContext(SetsContext);
 
@@ -26,6 +30,9 @@ export default function AddItem() {
       price: parseFloat(price),
       pieceCount: parseInt(pieceCount, 10),
       imageUrl: imageUrl || undefined,
+      stores,
+      retirementDate: retireDate ? retireDate.toISOString().split('T')[0] : undefined,
+      note,
     });
 
     Alert.alert('Success', 'Set added to your wishlist!');
@@ -35,12 +42,14 @@ export default function AddItem() {
     setPrice('');
     setPieceCount('');
     setImageUrl('');
+    setStores('')
+    setRetireDate(null);
+    setNote('')
   };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
       <Text style={styles.title}>Add a Set</Text>
-      <Text style={styles.subtitle}>Track a LEGO set you want to buy.</Text>
 
       {/* Set Name — full width */}
       <TextField
@@ -104,6 +113,36 @@ export default function AddItem() {
         optional={true}
       />
 
+      {/* Stores + Retirement date — side by side */}
+      <View style={styles.row}>
+        <View style={styles.rowHalf}>
+          <TextField
+            label="Available Stores"
+            placeholder="e.g. Smyths"
+            value={stores}
+            onChangeText={setStores}
+            optional={true}
+          />
+        </View>
+        <View style={styles.rowSpacer} />
+        <View style={styles.rowHalf}>
+          <DatePicker 
+            label='Retire Date' 
+            onChange={setRetireDate}
+            optional={true} />
+        </View>
+      </View>
+
+      {/* Notes — full width */}
+      <TextField
+        label="Add Notes"
+        placeholder="Add notes about a set"
+        value={note}
+        onChangeText={setNote}
+        optional={true}
+        lineNo={4}
+      />
+
       {/* Submit button */}
       <Button label='Add to Wishlist' onPress={handleSubmit} />
     </ScrollView>
@@ -124,11 +163,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.xl,
     fontWeight: 'bold',
     marginBottom: Spacing.xs,
-  },
-  subtitle: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.sm,
-    marginBottom: Spacing.lg,
   },
   row: {
     flexDirection: 'row',
