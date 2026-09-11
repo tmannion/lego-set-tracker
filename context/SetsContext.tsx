@@ -1,7 +1,6 @@
 import { createContext } from 'react';
-import { LegoSet } from '@/data/dummy';
+import { LegoSet, DUMMY_SETS } from '@/data/dummy';
 import { useState } from 'react';
-import { DUMMY_SETS } from '@/data/dummy';
 
 type SetsContextType = {
   sets: LegoSet[];

@@ -11,7 +11,19 @@ Built with: Expo SDK 57, Expo Router, React Native 0.86, TypeScript, Expo Go.
 
 ---
 
-## Current state (end of session 3)
+## Current state (end of session 4)
+
+### New files / changes this session
+
+| File | Change |
+|------|--------|
+| `data/dummy.ts` | Added `stores?`, `retirementDate?`, `note?` to `LegoSet` type |
+| `app/(tabs)/add-item.tsx` | Added stores, retirement date, notes fields; wired to handleSubmit |
+| `components/ui/DatePicker.tsx` | New component — tappable input that opens modal date picker |
+| `app/_layout.tsx` | StatusBar fixed to `dark` for light theme |
+
+### New dependency
+- `react-native-modal-datetime-picker` — wraps the native picker in a proper modal with Done/Cancel buttons. Better UX than using `@react-native-community/datetimepicker` directly.
 
 ### File structure
 
