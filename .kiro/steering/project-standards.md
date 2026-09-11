@@ -2,7 +2,7 @@
 
 ## Platform & Runtime
 
-- **Expo SDK 54**, React Native 0.81, React 19, TypeScript.
+- **Expo SDK 57**, React Native 0.86, React 19.2, TypeScript.
 - Target: **Expo Go** — do not use bare workflow features, native modules that
   require `expo prebuild`, or anything incompatible with Expo Go.
 - Always check the Expo v54 docs at https://docs.expo.dev/versions/v54.0.0/

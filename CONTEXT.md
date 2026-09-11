@@ -7,7 +7,7 @@ track price, piece count, theme, and an optional image. Future features
 include priority badges, retirement date alerts, store availability, and
 a profile/stats screen.
 
-Built with: Expo SDK 54, Expo Router, React Native, TypeScript, Expo Go.
+Built with: Expo SDK 57, Expo Router, React Native 0.86, TypeScript, Expo Go.
 
 ---
 
